@@ -13,10 +13,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: const [],
-      child: const MaterialAppWidget(),
-    );
+    // return MultiProvider(
+    //   providers: const [],
+    //   child: const MaterialAppWidget(),
+    // );
+    return const MaterialAppWidget();
   }
 }
 
@@ -28,9 +29,9 @@ class MaterialAppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Material App',
+      title: 'Sleep Well',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme().getTheme(),
+      theme: AppTheme(selectedColor: 1).getTheme(),
       home: const LoginPageScreen(),
       routes: {
         '/home': (context) => const ScreenNavbar(),

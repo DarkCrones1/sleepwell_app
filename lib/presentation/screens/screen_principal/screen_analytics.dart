@@ -9,7 +9,7 @@ class ScreenAnalyticsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Análisis Personalizado',
+          'Análisis',
           style: TextStyle(
             fontFamily: 'Montserrat',
             fontSize: 24,

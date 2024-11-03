@@ -14,7 +14,7 @@ class ScreenNavbar extends StatefulWidget {
 
 class _ScreenNavbarState extends State<ScreenNavbar> {
 
-  int currentPageIndex = 0;
+  int currentPageIndex = 2;
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +28,9 @@ class _ScreenNavbarState extends State<ScreenNavbar> {
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
           NavigationDestination(icon: Icon(Icons.access_time), label: 'Horario' ),
-          NavigationDestination(icon: Icon(Icons.category), label: 'Recomendaciones' ),
+          NavigationDestination(icon: Icon(Icons.category), label: 'Personal' ),
           NavigationDestination(icon: Icon(Icons.home_filled), label: 'Inicio' ),
-          NavigationDestination(icon: Icon(Icons.analytics), label: 'Analisis' ),
+          NavigationDestination(icon: Icon(Icons.analytics), label: 'Análisis' ),
           NavigationDestination(icon: Icon(Icons.person), label: 'Perfil' ),
         ],
       ),

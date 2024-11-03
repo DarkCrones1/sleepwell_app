@@ -32,7 +32,7 @@ class _RecoverPassPageScreenState extends State<RecoverPassPageScreen> {
                 children: <Widget>[
                   const SizedBox(height: 30),
                   Image.asset(
-                    'image/mundoartesano.png',
+                    'image/SleepWell.png',
                     height: 250,
                     width: 250,
                   ),

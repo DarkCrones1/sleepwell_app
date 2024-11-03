@@ -32,7 +32,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
               Column(
                 children: [
                   Image.asset(
-                    'image/mundoartesano.png',
+                    'image/SleepWell.png',
                     height: 250,
                     width: 250,
                   ),
@@ -129,7 +129,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
               const SizedBox(
                 height: 20,
               ),
-              ButtonBar(
+              OverflowBar(
                 children: <Widget>[
                   TextButton.icon(
                       onPressed: () => Navigator.pushNamed(context, '/sign_up'),

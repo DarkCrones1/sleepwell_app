@@ -30,7 +30,7 @@ class _SignUpPageScreenState extends State<SignUpPageScreen> {
           child: ListView(
             children: <Widget>[
               Image.asset(
-                'image/mundoartesano.png',
+                'image/SleepWell.png',
                 height: 250,
                 width: 250,
               ),
