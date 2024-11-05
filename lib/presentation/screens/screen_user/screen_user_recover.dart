@@ -26,15 +26,21 @@ class _RecoverPassPageScreenState extends State<RecoverPassPageScreen> {
         body: SafeArea(
           child: Form(
             key: formKey,
-            child: ListView(children: <Widget>[
+            child: ListView(
+              children: <Widget>[
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   const SizedBox(height: 30),
-                  Image.asset(
-                    'image/SleepWell.png',
-                    height: 250,
-                    width: 250,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(
+                        20), // Ajusta el valor para redondear más o menos las esquinas
+                    child: Image.asset(
+                      'image/SleepWell.png',
+                      height: 250,
+                      width: 250,
+                      fit: BoxFit
+                          .cover, // Esto asegura que la imagen cubra completamente el espacio
+                    ),
                   ),
                   const SizedBox(
                     height: 20,
