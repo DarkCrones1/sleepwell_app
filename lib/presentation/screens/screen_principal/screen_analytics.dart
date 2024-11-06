@@ -83,7 +83,7 @@ class ScreenAnalyticsPage extends StatelessWidget {
                   alignment: Alignment.center,
                   child: const Text('Card con info'),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 8),
 
                 // Recomendaciones
                 const Text(
