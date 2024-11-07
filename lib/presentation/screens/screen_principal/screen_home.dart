@@ -4,6 +4,7 @@ class ScreenHomePage extends StatefulWidget {
   const ScreenHomePage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ScreenHomePageState createState() => _ScreenHomePageState();
 }
 
@@ -32,7 +33,7 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -40,7 +41,7 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 30),
@@ -61,19 +62,19 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
                   ],
                 ),
                 IconButton(
-                  icon: Icon(Icons.notifications),
+                  icon: const Icon(Icons.notifications),
                   onPressed: () {},
                 ),
               ],
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             // Pregunta de descanso
             Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black12,
                     blurRadius: 4,
@@ -83,13 +84,15 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
               ),
               child: Column(
                 children: [
-                  Text('¿Te sentiste descansado después de dormir?', 
-                  style: TextStyle(fontWeight: FontWeight.bold),),
-                  SizedBox(height: 10),
+                  const Text(
+                    '¿Te sentiste descansado después de dormir?', 
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(Icons.sentiment_dissatisfied, color: Colors.red),
+                      const Icon(Icons.sentiment_dissatisfied, color: Colors.red),
                       Expanded(
                         child: Slider(
                           value: _sliderValue,
@@ -104,19 +107,19 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
                           },
                         ),
                       ),
-                      Icon(Icons.sentiment_satisfied, color: Colors.green),
+                      const Icon(Icons.sentiment_satisfied, color: Colors.green),
                     ],
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             // Calendario Horizontal
-            Text(
+            const Text(
               'Calendario',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -128,11 +131,11 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
                       children: [
                         Text(
                           '${date.day}',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         Text(
                           ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'][date.weekday - 1],
-                          style: TextStyle(color: Colors.black54),
+                          style: const TextStyle(color: Colors.black54),
                         ),
                       ],
                     ),
@@ -140,20 +143,20 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
                 }).toList(),
               ),
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             // Datos de sueño
-            Text(
+            const Text(
               'Datos de sueño',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             LayoutBuilder(
               builder: (context, constraints) {
                 if (constraints.maxWidth > 600) {
                   return GridView.builder(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
@@ -198,18 +201,18 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
                 }
               },
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             // Botón de "Empezar a dormir"
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {},
-                icon: Icon(Icons.nightlight_round),
-                label: Text('Empezar a dormir'),
+                icon: const Icon(Icons.nightlight_round),
+                label: const Text('Empezar a dormir'),
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   backgroundColor: Colors.blue[700],
                   foregroundColor: Colors.white,
-                  textStyle: TextStyle(fontSize: 20),
+                  textStyle: const TextStyle(fontSize: 20),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -227,16 +230,16 @@ class SleepDataCard extends StatelessWidget {
   final String data;
   final String label;
 
-  SleepDataCard({required this.data, required this.label});
+  const SleepDataCard({super.key, required this.data, required this.label});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.blue[200],
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 4,
@@ -247,9 +250,9 @@ class SleepDataCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(data, style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+          Text(data, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
           if (label.isNotEmpty)
-            Text(label, style: TextStyle(fontSize: 16, color: Colors.black54)),
+            Text(label, style: const TextStyle(fontSize: 16, color: Colors.black54)),
         ],
       ),
     );

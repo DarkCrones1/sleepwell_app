@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class ScreenAnalyticsPage extends StatelessWidget {
@@ -13,27 +12,27 @@ class ScreenAnalyticsPage extends StatelessWidget {
           style: TextStyle(
             fontFamily: 'Montserrat',
             fontSize: 24,
-            fontWeight: FontWeight.bold, // Texto blanco
+            fontWeight: FontWeight.bold, 
           ),
         ),
         actions: const [],
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
-          return Padding(
+          return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                //Botones superiores
+                // Botones superiores
                 Wrap(
                   spacing: 8.0,
                   runSpacing: 8.0,
                   alignment: WrapAlignment.spaceEvenly,
                   children: [
-                    ElevatedButton(onPressed: () {}, child: const Text('Boton'),),
-                    ElevatedButton(onPressed: () {}, child: const Text('Boton'),),
-                    ElevatedButton(onPressed: () {}, child: const Text('Boton'),)
+                    ElevatedButton(onPressed: () {}, child: const Text('Botón')),
+                    ElevatedButton(onPressed: () {}, child: const Text('Botón')),
+                    ElevatedButton(onPressed: () {}, child: const Text('Botón'))
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -71,7 +70,7 @@ class ScreenAnalyticsPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
 
-                // Infomración detallada
+                // Información detallada
                 const Text(
                   'Información detallada',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -95,7 +94,7 @@ class ScreenAnalyticsPage extends StatelessWidget {
                   spacing: 8.0,
                   runSpacing: 8.0,
                   alignment: WrapAlignment.spaceEvenly,
-                  children: List.generate(3, (index){
+                  children: List.generate(3, (index) {
                     return Container(
                       width: (constraints.maxWidth - 48) / 3,
                       height: 100,
@@ -109,7 +108,7 @@ class ScreenAnalyticsPage extends StatelessWidget {
             ),
           );
         },
-      )
+      ),
     );
   }
 }

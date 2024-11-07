@@ -11,7 +11,7 @@ class ScreenTimePage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -129,7 +129,8 @@ class SleepStageBar extends StatelessWidget {
   final String label;
   final int percentage;
 
-  const SleepStageBar({super.key, required this.label, required this.percentage});
+  const SleepStageBar(
+      {super.key, required this.label, required this.percentage});
 
   @override
   Widget build(BuildContext context) {
