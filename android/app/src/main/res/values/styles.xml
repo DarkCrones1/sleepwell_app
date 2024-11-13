@@ -15,4 +15,16 @@
     <style name="NormalTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <item name="android:windowBackground">?android:colorBackground</item>
     </style>
+    <array name="health_permissions">
+        <item>android.permission.health.READ_SLEEP</item>
+        <item>android.permission.health.WRITE_SLEEP</item>
+        <item>android.permission.health.READ_HEART_RATE</item>
+        <item>android.permission.health.WRITE_HEART_RATE</item>
+        <item>android.permission.health.READ_OXYGEN_SATURATION</item>
+        <item>android.permission.health.WRITE_OXYGEN_SATURATION</item>
+        <item>android.permission.health.READ_RESPIRATORY_RATE</item>
+        <item>android.permission.health.WRITE_RESPIRATORY_RATE</item>
+        <item>android.permission.health.READ_RESTING_HEART_RATE</item>
+        <item>android.permission.health.WRITE_RESTING_HEART_RATE</item>
+    </array>
 </resources>

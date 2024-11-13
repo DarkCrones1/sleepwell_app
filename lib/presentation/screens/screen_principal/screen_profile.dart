@@ -11,6 +11,24 @@ class ScreenProfilePage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
+        actions: [
+          // Botón de opciones (engranaje)
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.settings),
+            onSelected: (String value) {
+              if (value == 'permisos') {
+                Navigator.pushNamed(context, '/screen_permissions');
+              }
+            },
+            itemBuilder: (BuildContext context) => [
+              const PopupMenuItem<String>(
+                value: 'permisos',
+                child: Text('Permisos'),
+              ),
+              // Puedes agregar más opciones aquí
+            ],
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -31,14 +49,12 @@ class ScreenProfilePage extends StatelessWidget {
                     radius: 30,
                     backgroundColor: Colors.white,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(
-                          20), // Ajusta el valor para redondear más o menos las esquinas
+                      borderRadius: BorderRadius.circular(20),
                       child: Image.asset(
                         'image/SleepWell.png',
                         height: 250,
                         width: 250,
-                        fit: BoxFit
-                            .cover, // Esto asegura que la imagen cubra completamente el espacio
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
@@ -47,8 +63,10 @@ class ScreenProfilePage extends StatelessWidget {
                     'Iván Andrea Berenice',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                  const Text('esteesuncorreo@gmail.com',
-                      style: TextStyle(color: Colors.black54)),
+                  const Text(
+                    'esteesuncorreo@gmail.com',
+                    style: TextStyle(color: Colors.black54),
+                  ),
                   const SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () {},
