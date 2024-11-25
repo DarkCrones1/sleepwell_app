@@ -7,6 +7,7 @@ import 'package:sleepwell_app/presentation/screens/screen_principal/screen_profi
 import 'package:sleepwell_app/presentation/screens/screen_user/screen_user_login.dart';
 import 'package:sleepwell_app/presentation/screens/screen_user/screen_user_recover.dart';
 import 'package:sleepwell_app/presentation/screens/screen_user/screen_user_signup.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 void main() => runApp(const MyApp());
 
