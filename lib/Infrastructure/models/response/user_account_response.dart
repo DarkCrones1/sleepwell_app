@@ -1,9 +1,9 @@
 
 import 'dart:convert';
 
-UserAccountResponseDto userAccountResponseDtoCsFromJson(String str) => UserAccountResponseDto.fromJson(json.decode(str));
+UserAccountResponseDto userAccountResponseDtoFromJson(String str) => UserAccountResponseDto.fromJson(json.decode(str));
 
-String userAccountResponseDtoCsToJson(UserAccountResponseDto data) => json.encode(data.toJson());
+String userAccountResponseDtoToJson(UserAccountResponseDto data) => json.encode(data.toJson());
 
 class UserAccountResponseDto {
     final int id;

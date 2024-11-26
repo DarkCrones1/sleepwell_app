@@ -1,6 +1,6 @@
-// import 'package:mundoartesano/providers/user_providers/login_user_account_provider.dart';
 import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
+import 'package:sleepwell_app/providers/user_providers/user_login_provider.dart';
+import 'package:provider/provider.dart';
 
 class LoginPageScreen extends StatefulWidget {
   const LoginPageScreen({super.key});
@@ -60,7 +60,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                   keyboardType: TextInputType.text,
                   decoration: const InputDecoration(
                     filled: true,
-                    labelText: 'Correo',
+                    labelText: 'Nombre Usuario / Email',
                     suffixIcon: Icon(Icons.account_circle),
                     border: OutlineInputBorder(),
                   ),
@@ -122,12 +122,10 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                   FilledButton(
                     child: const Text('Entrar'),
                     onPressed: () async {
-                      // if (formKey.currentState!.validate()) {
-                      //   context.read<LoginUserProvider>().loginUser(
-                      //       userNameOrEmail.text, password.text, context);
-                      // }
-                      Navigator.restorablePushNamedAndRemoveUntil(
-                          context, '/home', (route) => false);
+                      if (formKey.currentState!.validate()) {
+                        context.read<UserLoginProvider>().loginUser(
+                            userNameOrEmail.text, password.text, context);
+                      }
                     },
                   )
                 ],

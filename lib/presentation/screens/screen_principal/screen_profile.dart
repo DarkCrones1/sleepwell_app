@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sleepwell_app/providers/user_providers/user_data_provider.dart';
 
 class ScreenProfilePage extends StatelessWidget {
   const ScreenProfilePage({super.key});
@@ -18,152 +20,165 @@ class ScreenProfilePage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SizedBox(
-                  width: 400,
-                  child: Container(
+      body: Consumer<UserDataProvider>(
+        builder: (context, userDataProvider, child) {
+          if (userDataProvider.isloading) {
+            // Puedes mostrar un loader mientras se obtienen los datos
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final userData = userDataProvider.userData;
+
+          return SingleChildScrollView(
+            child: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
                     padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          radius: 40,
-                          backgroundColor: Colors.transparent,
-                          child: ClipOval(
-                            child: Image.asset(
-                              'image/SleepWell.png',
-                              fit: BoxFit.cover,
-                              height: 80,
-                              width: 80,
+                    child: SizedBox(
+                      width: 400,
+                      child: Container(
+                        padding: const EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              blurRadius: 10,
+                              offset: const Offset(0, 5),
                             ),
-                          ),
+                          ],
                         ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Nombre',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Colors.black,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          'Correo',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black54,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromARGB(255, 64, 217, 255),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              radius: 40,
+                              backgroundColor: Colors.transparent,
+                              child: ClipOval(
+                                child: Image.asset(
+                                  'image/SleepWell.png', // O usa la imagen del perfil si está disponible
+                                  fit: BoxFit.cover,
+                                  height: 80,
+                                  width: 80,
+                                ),
+                              ),
                             ),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 32,
-                              vertical: 12,
+                            const SizedBox(height: 16),
+                            Text(
+                              userData?.fullName ?? 'Nombre',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
                             ),
-                          ),
-                          child: const Text(
-                            'Cambiar a Premium',
-                            style: TextStyle(fontSize: 16, color: Colors.white),
-                          ),
+                            const SizedBox(height: 4),
+                            const Text(
+                              'Correo',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black54,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    const Color.fromARGB(255, 64, 217, 255),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 32,
+                                  vertical: 12,
+                                ),
+                              ),
+                              child: const Text(
+                                'Cambiar a Premium',
+                                style: TextStyle(fontSize: 16, color: Colors.white),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: SizedBox(
-                  width: 400,
-                  child: Container(
-                    padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          blurRadius: 10,
-                          offset: const Offset(0, 5),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: SizedBox(
+                      width: 400,
+                      child: Container(
+                        padding: const EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              blurRadius: 10,
+                              offset: const Offset(0, 5),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        _buildOptionItem(
-                          context,
-                          icon: Icons.person,
-                          text: 'Editar perfil',
-                          onTap: () {
-                            Navigator.pushNamed(context, '/edit_profile');
-                          },
+                        child: Column(
+                          children: [
+                            _buildOptionItem(
+                              context,
+                              icon: Icons.person,
+                              text: 'Editar perfil',
+                              onTap: () {
+                                Navigator.pushNamed(context, '/edit_profile');
+                              },
+                            ),
+                            _buildOptionItem(
+                              context,
+                              icon: Icons.settings,
+                              text: 'Permisos',
+                              onTap: () {
+                                Navigator.pushNamed(context, '/screen_permissions');
+                              },
+                            ),
+                            _buildOptionItem(
+                              context,
+                              icon: Icons.devices,
+                              text: 'Vincular dispositivo',
+                              onTap: () {
+                                // Acción para vincular dispositivo
+                              },
+                            ),
+                          ],
                         ),
-                        _buildOptionItem(
-                          context,
-                          icon: Icons.settings,
-                          text: 'Permisos',
-                          onTap: () {
-                            Navigator.pushNamed(context, '/screen_permissions');
-                          },
-                        ),
-                        _buildOptionItem(
-                          context,
-                          icon: Icons.devices,
-                          text: 'Vincular dispositivo',
-                          onTap: () {
-                          },
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.redAccent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Acción para cerrar sesión
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    ),
+                    child: const Text(
+                      'Cerrar sesión',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                ),
-                child: const Text(
-                  'Cerrar sesión',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
