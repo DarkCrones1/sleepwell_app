@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
+import 'package:sleepwell_app/providers/user_providers/user_account_provider.dart';
 
 class SignUpPageScreen extends StatefulWidget {
   const SignUpPageScreen({super.key});
@@ -123,22 +124,22 @@ class _SignUpPageScreenState extends State<SignUpPageScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  // OverflowBar(
-                  //   children: <Widget>[
-                  //     TextButton.icon(
-                  //         onPressed: () {
-                  //           if (formKey.currentState!.validate()) {
-                  //             context.read<UserAccountProvider>().create(
-                  //                 userName.text,
-                  //                 password.text,
-                  //                 email.text,
-                  //                 context);
-                  //           }
-                  //         },
-                  //         icon: const Icon(Icons.create),
-                  //         label: const Text('Crear cuenta')),
-                  //   ],
-                  // ),
+                  OverflowBar(
+                    children: <Widget>[
+                      TextButton.icon(
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              context.read<UserAccountProvider>().createUser(
+                                  userName.text,
+                                  email.text,
+                                  password.text,
+                                  context);
+                            }
+                          },
+                          icon: const Icon(Icons.create),
+                          label: const Text('Crear cuenta')),
+                    ],
+                  ),
                 ],
               )
             ],
