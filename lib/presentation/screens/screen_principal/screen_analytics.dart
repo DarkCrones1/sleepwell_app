@@ -1,8 +1,20 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:provider/provider.dart';
+import 'package:sleepwell_app/Infrastructure/models/response/data_dream_response.dart';
+import 'package:sleepwell_app/providers/data_dream_providers/data_dream_provider.dart';
 
-class ScreenAnalyticsPage extends StatelessWidget {
+class ScreenAnalyticsPage extends StatefulWidget {
   const ScreenAnalyticsPage({super.key});
+
+  @override
+  _ScreenAnalyticsPageState createState() => _ScreenAnalyticsPageState();
+}
+
+class _ScreenAnalyticsPageState extends State<ScreenAnalyticsPage> {
+  int _pageSize = 30; // Valor por defecto
 
   @override
   Widget build(BuildContext context) {
@@ -17,22 +29,56 @@ class ScreenAnalyticsPage extends StatelessWidget {
           ),
         ),
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
+      body: Consumer<DataDreamProvider>(
+        builder: (context, dataDreamProvider, child) {
+          if (dataDreamProvider.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final data =
+              dataDreamProvider.dataDream!; // Usamos un valor no nulo aquí
+
+          // Mapeo de horas de sueño profundo para el gráfico
+          final sleepDurations =
+              data.map((item) => item.deepSleepHours.toDouble()).toList();
+          // Mapeo de calidad del sueño para el gráfico
+          final qualityScores = data
+              .map((item) =>
+                  _mapSleepQualityToScore(item.sleepQualityStatusName))
+              .toList();
+
+          // Contar cuántos días corresponden a cada calidad de sueño
+          final qualityCount = _countSleepQualityStatus(data);
+
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                // Botones superiores
-                Wrap(
-                  spacing: 8.0,
-                  runSpacing: 8.0,
-                  alignment: WrapAlignment.spaceEvenly,
+                // Selector de cantidad de días (pageSize)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    ElevatedButton(onPressed: () {}, child: const Text('Última Semana')),
-                    ElevatedButton(onPressed: () {}, child: const Text('Último Mes')),
-                    ElevatedButton(onPressed: () {}, child: const Text('Ajustes')),
+                    const Text('Selecciona cantidad de días: '),
+                    DropdownButton<int>(
+                      value: _pageSize,
+                      items: [3, 7, 15, 30, 60].map((int value) {
+                        return DropdownMenuItem<int>(
+                          value: value,
+                          child: Text('$value días'),
+                        );
+                      }).toList(),
+                      onChanged: (newPageSize) {
+                        if (newPageSize != null) {
+                          setState(() {
+                            _pageSize = newPageSize;
+                          });
+                          dataDreamProvider.getDataDream(
+                              pageSize:
+                                  newPageSize); // Recargar los datos con el nuevo pageSize
+                        }
+                      },
+                    ),
                   ],
                 ),
                 const SizedBox(height: 16),
@@ -43,20 +89,29 @@ class ScreenAnalyticsPage extends StatelessWidget {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Container(
-                  height: constraints.maxWidth > 600 ? 250 : 150,
+                  height: 250,
                   padding: const EdgeInsets.all(8.0),
                   child: LineChart(
                     LineChartData(
                       gridData: const FlGridData(show: true),
                       titlesData: FlTitlesData(
                         leftTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: true, reservedSize: 40),
+                          sideTitles:
+                              SideTitles(showTitles: true, reservedSize: 40),
                         ),
                         bottomTitles: AxisTitles(
                           sideTitles: SideTitles(
                             showTitles: true,
                             getTitlesWidget: (value, meta) {
-                              const days = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+                              const days = [
+                                'Lun',
+                                'Mar',
+                                'Mié',
+                                'Jue',
+                                'Vie',
+                                'Sáb',
+                                'Dom'
+                              ];
                               return Text(days[value.toInt() % days.length]);
                             },
                           ),
@@ -65,16 +120,14 @@ class ScreenAnalyticsPage extends StatelessWidget {
                       lineBarsData: [
                         LineChartBarData(
                           isCurved: true,
-                          spots: const [
-                            FlSpot(0, 7),
-                            FlSpot(1, 6.5),
-                            FlSpot(2, 8),
-                            FlSpot(3, 6),
-                            FlSpot(4, 7.5),
-                            FlSpot(5, 8),
-                            FlSpot(6, 7),
-                          ],
-                          belowBarData: BarAreaData(show: true, color: Colors.blue.withOpacity(0.2)),
+                          spots: sleepDurations
+                              .asMap()
+                              .map((i, e) =>
+                                  MapEntry(i, FlSpot(i.toDouble(), e)))
+                              .values
+                              .toList(),
+                          belowBarData: BarAreaData(
+                              show: true, color: Colors.blue.withOpacity(0.2)),
                         ),
                       ],
                     ),
@@ -95,72 +148,62 @@ class ScreenAnalyticsPage extends StatelessWidget {
                       gridData: const FlGridData(show: false),
                       titlesData: FlTitlesData(
                         leftTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: true, reservedSize: 40),
+                          sideTitles:
+                              SideTitles(showTitles: true, reservedSize: 40),
                         ),
                         bottomTitles: AxisTitles(
                           sideTitles: SideTitles(
                             showTitles: true,
                             getTitlesWidget: (value, meta) {
-                              const days = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+                              const days = [
+                                'Lun',
+                                'Mar',
+                                'Mié',
+                                'Jue',
+                                'Vie',
+                                'Sáb',
+                                'Dom'
+                              ];
                               return Text(days[value.toInt() % days.length]);
                             },
                           ),
                         ),
                       ),
-                      barGroups: [
-                        for (var i = 0; i < 7; i++)
-                          BarChartGroupData(x: i, barRods: [
-                            BarChartRodData(toY: (i + 1) * 1.1, color: Colors.blueAccent),
-                          ]),
-                      ],
+                      barGroups: qualityScores
+                          .asMap()
+                          .map((i, score) => MapEntry(
+                              i,
+                              BarChartGroupData(x: i, barRods: [
+                                BarChartRodData(
+                                    toY: score.toDouble(),
+                                    color: Colors.blueAccent),
+                              ])))
+                          .values
+                          .toList(),
                     ),
                   ),
                 ),
                 const SizedBox(height: 16),
 
-                // Gráfico circular para fases del sueño
+                // Gráfico circular para mostrar la distribución de calidad del sueño
                 const Text(
-                  'Fases del sueño',
+                  'Distribución de la calidad del sueño',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
+                const SizedBox(height: 16),
                 Container(
-                  height: 200,
+                  height: 250,
                   padding: const EdgeInsets.all(8.0),
                   child: PieChart(
                     PieChartData(
-                      sections: [
-                        PieChartSectionData(
-                          color: Colors.blue,
-                          value: 40,
-                          title: 'REM',
-                          titleStyle: const TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                        PieChartSectionData(
-                          color: Colors.green,
-                          value: 30,
-                          title: 'Profundo',
-                          titleStyle: const TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                        PieChartSectionData(
-                          color: Colors.yellow,
-                          value: 30,
-                          title: 'Ligero',
-                          titleStyle: const TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                      ],
-                      centerSpaceRadius: 40,
-                      sectionsSpace: 4,
+                      sectionsSpace: 0,
+                      centerSpaceRadius: 50,
+                      sections: _buildQualityStatusChart(qualityCount),
                     ),
                   ),
                 ),
+                // Tarjetas con estadísticas clave
                 const SizedBox(height: 16),
-
-                // Información detallada en las cards
-                const Text(
-                  'Resumen de gráficos',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 8),
                 Wrap(
                   spacing: 8.0,
                   runSpacing: 8.0,
@@ -168,24 +211,21 @@ class ScreenAnalyticsPage extends StatelessWidget {
                   children: [
                     _buildInfoCard(
                       'Promedio de horas de sueño',
-                      '7 horas',
+                      '${_calculateAverageSleepHours(data).toStringAsFixed(1)} horas',
                       Icons.bedtime,
                       Colors.blue,
-                      constraints,
                     ),
                     _buildInfoCard(
-                      'Porcentaje de noches con sueño de buena calidad',
-                      '80%',
+                      'Porcentaje de noches con buena calidad',
+                      '${_calculateGoodQualityPercentage(data)}%',
                       Icons.nights_stay,
                       Colors.green,
-                      constraints,
                     ),
                     _buildInfoCard(
-                      'Distribución de fases de sueño\nREM: 40%, Profundo: 30%, Ligero: 30%',
-                      'REM: 40%\nProfundo: 30%\nLigero: 30%',
+                      'Distribución de fases de sueño',
+                      _calculateSleepPhaseDistribution(data),
                       Icons.pie_chart,
                       Colors.orange,
-                      constraints,
                     ),
                   ],
                 ),
@@ -197,9 +237,9 @@ class ScreenAnalyticsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoCard(String title, String data, IconData icon, Color color, BoxConstraints constraints) {
+  Widget _buildInfoCard(String title, String data, IconData icon, Color color) {
     return Container(
-      width: constraints.maxWidth < 600 ? constraints.maxWidth / 2 - 24 : 180,
+      width: 180,
       height: 120,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -217,7 +257,7 @@ class ScreenAnalyticsPage extends StatelessWidget {
             title,
             style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             overflow: TextOverflow.ellipsis,
-            maxLines: 2, // Limitar a dos líneas para evitar overflow
+            maxLines: 2,
           ),
           const SizedBox(height: 4),
           Expanded(
@@ -226,7 +266,8 @@ class ScreenAnalyticsPage extends StatelessWidget {
               alignment: Alignment.topLeft,
               child: Text(
                 data,
-                style: TextStyle(fontSize: 14, color: color, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 14, color: color, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -234,4 +275,112 @@ class ScreenAnalyticsPage extends StatelessWidget {
       ),
     );
   }
+
+  // Mapeo de la calidad del sueño a un valor numérico
+  int _mapSleepQualityToScore(String sleepQuality) {
+    switch (sleepQuality) {
+      case 'Excelente':
+        return 1;
+      case 'Buena':
+        return 2;
+      case 'Regular':
+        return 3;
+      case 'Mala':
+        return 4;
+      default:
+        return 0; // Si no se reconoce, asignamos 0
+    }
+  }
+
+  // Función para contar cuántos días tuvieron cada tipo de calidad de sueño
+  Map<String, int> _countSleepQualityStatus(List<DataDreamResponseDto> data) {
+    final qualityCount = <String, int>{};
+
+    for (var item in data) {
+      final quality = item.sleepQualityStatusName;
+      qualityCount[quality] = (qualityCount[quality] ?? 0) + 1;
+    }
+
+    return qualityCount;
+  }
+
+  // Función para crear los datos de las secciones del gráfico circular
+  List<PieChartSectionData> _buildQualityStatusChart(
+      Map<String, int> qualityCount) {
+    final total = qualityCount.values.reduce((a, b) => a + b);
+
+    return qualityCount.entries.map((entry) {
+      final percentage = (entry.value / total) * 100;
+      return PieChartSectionData(
+        value: percentage,
+        color: _getColorForQuality(entry.key),
+        title: '${entry.value} días',
+        radius: 80, // Un radio mayor para hacerlo más grande y visible
+        titleStyle: const TextStyle(
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+        borderSide: BorderSide(
+          color: Colors.white
+              .withOpacity(0.5), // Agregar borde suave para simular pastel
+          width: 2, // Ancho del borde
+        ),
+        showTitle: true, // Mostrar el título en cada sección
+      );
+    }).toList();
+  }
+
+  // Asignar colores según la calidad del sueño
+  Color _getColorForQuality(String quality) {
+    switch (quality) {
+      case 'Excelente':
+        return Colors.green;
+      case 'Buena':
+        return Colors.blue;
+      case 'Regular':
+        return Colors.orange;
+      default:
+        return Colors.grey;
+    }
+  }
+}
+
+// Calcula el promedio de horas de sueño
+// Calcula el promedio de horas de sueño
+double _calculateAverageSleepHours(List<DataDreamResponseDto> data) {
+  if (data.isEmpty) return 0.0;
+  final totalHours = data.fold(0.0, (sum, item) => sum + item.deepSleepHours);
+  return totalHours / data.length;
+}
+
+// Calcula el porcentaje de noches con buena calidad de sueño
+int _calculateGoodQualityPercentage(List<DataDreamResponseDto> data) {
+  if (data.isEmpty) return 0;
+
+  // Consideramos "Buena" y "Excelente" como buenas calidades
+  final goodQualityCount = data.where((item) {
+    return item.sleepQualityStatusName == 'Buena' ||
+        item.sleepQualityStatusName == 'Excelente';
+  }).length;
+
+  return ((goodQualityCount / data.length) * 100).round();
+}
+
+// Calcula la distribución de las fases de sueño: Profundo y No Profundo
+String _calculateSleepPhaseDistribution(List<DataDreamResponseDto> data) {
+  if (data.isEmpty) return "Sin datos";
+
+  int deepSleepCount = 0;
+  int totalSleepCount = 0;
+
+  for (var item in data) {
+    deepSleepCount += item.deepSleepHours.round();
+    totalSleepCount +=
+        (item.durationMinutes / 60).round(); // Total de horas de sueño
+  }
+
+  if (totalSleepCount == 0) return "Sin datos";
+
+  final deepPercentage = ((deepSleepCount / totalSleepCount) * 100).round();
+  final nonDeepPercentage = 100 - deepPercentage;
+
+  return "Profundo: $deepPercentage%, No Profundo: $nonDeepPercentage%";
 }
