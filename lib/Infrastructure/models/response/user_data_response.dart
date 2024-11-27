@@ -19,6 +19,8 @@ class UserDataResponseDto {
     final int age;
     final String fullName;
     final bool isDeleted;
+    final String email;
+    final String userName;
 
     UserDataResponseDto({
         required this.id,
@@ -34,6 +36,8 @@ class UserDataResponseDto {
         required this.age,
         required this.fullName,
         required this.isDeleted,
+        required this.email,
+        required this.userName
     });
 
     factory UserDataResponseDto.fromJson(Map<String, dynamic> json) => UserDataResponseDto(
@@ -50,6 +54,8 @@ class UserDataResponseDto {
         age: json["Age"],
         fullName: json["FullName"],
         isDeleted: json["IsDeleted"],
+        email: json["Email"],
+        userName: json["UserName"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -66,5 +72,8 @@ class UserDataResponseDto {
         "Age": age,
         "FullName": fullName,
         "IsDeleted": isDeleted,
+        "Email": email,
+        "UserName": userName,
+        
     };
 }

@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:sleepwell_app/Infrastructure/models/request/update/user_data_update.dart';
 import 'package:sleepwell_app/Infrastructure/models/response/user_data_response.dart';
 import 'package:sleepwell_app/providers/user_providers/user_login_provider.dart';
 import 'package:http/http.dart' as http;
@@ -25,7 +27,7 @@ class UserDataProvider extends ChangeNotifier {
     final response = await http.get(
       Uri.parse('http://sleepwellproject.somee.com/api/UserData/Self'),
       headers: <String, String>{
-        'accept': 'application/json',  // aseguramos que aceptamos JSON
+        'accept': 'application/json',
         'Authorization': 'Bearer $token',
       },
     );
@@ -33,17 +35,17 @@ class UserDataProvider extends ChangeNotifier {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
 
-      // Asegúrate de que 'Data' esté presente en la respuesta
+      // Valida que el campo `Data` no sea nulo
       if (data != null && data['Data'] != null) {
-        // Extrae los datos desde 'Data' y mapéalos al modelo
         _userData = UserDataResponseDto.fromJson(data['Data']);
         isloading = false;
         notifyListeners();
       } else {
-        throw Exception('Failed to load user data: Data field is null');
+        throw Exception('Data field is null or missing in API response');
       }
     } else {
-      throw Exception('Failed to load data, status code: ${response.statusCode}');
+      throw Exception(
+          'Failed to load data, status code: ${response.statusCode}');
     }
   } catch (e) {
     logger.e("Error fetching user data: $e");
@@ -53,4 +55,67 @@ class UserDataProvider extends ChangeNotifier {
   }
 }
 
+  Future updateData(
+      String firstName,
+      String middleName,
+      String lastName,
+      String phone,
+      String cellPhone,
+      int gender,
+      DateTime birthDate,
+      BuildContext context) async {
+    final userDataToken = UserLoginProvider();
+    final token = await userDataToken.getAuthToken();
+
+    final user = UserDataUpdateDto(
+        firstName: firstName,
+        middleName: middleName,
+        lastName: lastName,
+        phone: phone,
+        cellPhone: cellPhone,
+        gender: gender,
+        birthDate: birthDate);
+
+    logger.d(token);
+    logger.d(user);
+
+    final response = await http.put(
+      Uri.parse('http://sleepwellproject.somee.com/api/UserData'),
+      headers: <String, String>{
+        'accept': 'application/json',
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(user),
+    );
+
+    if (response.statusCode == 200) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('Perfil Actualizado')));
+        Navigator.pop(context);
+      }
+    } else {
+      logger.e('Error: {Rellene los campos faltantes}');
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Error"),
+              content: const Text("Rellene todos los campos"),
+              actions: [
+                TextButton(
+                  child: const Text("Cerrar"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
+  }
 }

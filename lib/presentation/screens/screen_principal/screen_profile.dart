@@ -77,9 +77,9 @@ class ScreenProfilePage extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 4),
-                            const Text(
-                              'Correo',
-                              style: TextStyle(
+                            Text(
+                              userData?.email ?? 'Correo',
+                              style: const TextStyle(
                                 fontSize: 14,
                                 color: Colors.black54,
                               ),
