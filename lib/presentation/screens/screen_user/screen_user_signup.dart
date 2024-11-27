@@ -33,13 +33,13 @@ class _SignUpPageScreenState extends State<SignUpPageScreen> {
                 children: <Widget>[
                   ClipRRect(
                     borderRadius: BorderRadius.circular(
-                        20), // Ajusta el valor para redondear más o menos las esquinas
+                        20),
                     child: Image.asset(
                       'image/SleepWell.png',
                       height: 250,
                       width: 250,
                       fit: BoxFit
-                          .cover, // Esto asegura que la imagen cubra completamente el espacio
+                          .cover, 
                     ),
                   ),
                   const SizedBox(
