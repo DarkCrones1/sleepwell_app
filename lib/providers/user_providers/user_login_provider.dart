@@ -8,7 +8,12 @@ import 'package:sleepwell_app/Infrastructure/models/response/user_account_respon
 
 class UserLoginProvider extends ChangeNotifier {
   final logger = Logger();
-  final storage = const FlutterSecureStorage();
+  final storage = const FlutterSecureStorage(
+  aOptions: AndroidOptions(
+    encryptedSharedPreferences: true,
+  ),
+);
+
 
   List<UserAccountResponseDto>? _users;
   bool isloading = true;
@@ -16,11 +21,13 @@ class UserLoginProvider extends ChangeNotifier {
 
   Future loginUser(String userNameOrEmail, String password, BuildContext context) async {
     final user = LoginRequestDto(userNameOrEmail: userNameOrEmail, password: password);
+    logger.d(user.toJson());
 
     try {
       final response = await http.post(
         Uri.parse('https://sleepwellproject.somee.com/api/Login'),
         headers: <String, String>{
+          'accept': '*/*',
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(user),
