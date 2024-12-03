@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sleepwell_app/config/theme.dart';
 import 'package:sleepwell_app/providers/user_providers/user_data_provider.dart';
 
 class ScreenProfilePage extends StatelessWidget {
