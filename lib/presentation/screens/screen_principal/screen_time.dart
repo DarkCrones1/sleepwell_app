@@ -14,7 +14,7 @@ class _ScreenTimePageState extends State<ScreenTimePage> {
   late Timer _timer;
   DateTime _startTime = DateTime.now();
   DateTime? _alarmTime;
-  String _currentTime = DateFormat('HH:mm:ss').format(DateTime.now());
+  String _currentTime = DateFormat('HH:mm').format(DateTime.now());
   Duration _elapsedSleepTime = Duration.zero;
 
   final FlutterLocalNotificationsPlugin _localNotificationsPlugin =
@@ -34,7 +34,7 @@ class _ScreenTimePageState extends State<ScreenTimePage> {
 
   void _updateTime(Timer timer) {
     setState(() {
-      _currentTime = DateFormat('HH:mm:ss').format(DateTime.now());
+      _currentTime = DateFormat('HH:mm').format(DateTime.now());
       _elapsedSleepTime = DateTime.now().difference(_startTime);
     });
     _checkAlarm();
@@ -93,7 +93,6 @@ class _ScreenTimePageState extends State<ScreenTimePage> {
   @override
   Widget build(BuildContext context) {
     final hoursSlept = _elapsedSleepTime.inHours;
-    final minutesSlept = _elapsedSleepTime.inMinutes.remainder(60);
     final timeUntilAlarm = _alarmTime != null
         ? _alarmTime!.difference(DateTime.now())
         : Duration.zero;
@@ -101,7 +100,8 @@ class _ScreenTimePageState extends State<ScreenTimePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Seguimiento del sueño'),
+        title: const Text('Seguimiento del sueño',
+        style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
         elevation: 0,
       ),
@@ -111,29 +111,13 @@ class _ScreenTimePageState extends State<ScreenTimePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text(
-              'Seguimiento del sueño',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              'Hora actual',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 20),
             Text(
               _currentTime,
               style: const TextStyle(fontSize: 80, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              '${hoursSlept.toString().padLeft(2, '0')}:${minutesSlept.toString().padLeft(2, '0')}',
-              style: TextStyle(
-                fontSize: 80,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey.withOpacity(0.3),
-              ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.pause, size: 40),
-              onPressed: () {
-                setState(() {
-                  _startTime = DateTime.now();
-                });
-              },
             ),
             const SizedBox(height: 20),
             Container(

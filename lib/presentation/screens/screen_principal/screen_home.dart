@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sleepwell_app/presentation/screens/screen_principal/screen_time.dart';
 import 'package:sleepwell_app/providers/data_dream_providers/data_dream_provider.dart';
 
 class ScreenHomePage extends StatefulWidget {
@@ -104,7 +105,8 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Icon(Icons.sentiment_dissatisfied, color: Colors.red),
+                      const Icon(Icons.sentiment_dissatisfied,
+                          color: Colors.red),
                       Expanded(
                         child: Slider(
                           value: _sliderValue,
@@ -119,7 +121,8 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
                           },
                         ),
                       ),
-                      const Icon(Icons.sentiment_satisfied, color: Colors.green),
+                      const Icon(Icons.sentiment_satisfied,
+                          color: Colors.green),
                     ],
                   ),
                 ],
@@ -147,9 +150,8 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
                           width: 50,
                           height: 50,
                           decoration: BoxDecoration(
-                            color: isToday
-                                ? Colors.blue[700]
-                                : Colors.transparent,
+                            color:
+                                isToday ? Colors.blue[700] : Colors.transparent,
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
                               color: isToday
@@ -176,9 +178,8 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
-                                    color: isToday
-                                        ? Colors.white
-                                        : Colors.black,
+                                    color:
+                                        isToday ? Colors.white : Colors.black,
                                   ),
                                 ),
                                 Text(
@@ -193,9 +194,8 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
                                   ][date.weekday - 1],
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: isToday
-                                        ? Colors.white
-                                        : Colors.black54,
+                                    color:
+                                        isToday ? Colors.white : Colors.black54,
                                   ),
                                 ),
                               ],
@@ -304,7 +304,14 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
             // Botón de "Empezar a dormir"
             Center(
               child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  // Navegar a la página de ScreenTime
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ScreenTimePage()),
+                  );
+                },
                 icon: const Icon(Icons.nightlight_round),
                 label: const Text('Empezar a dormir'),
                 style: ElevatedButton.styleFrom(
