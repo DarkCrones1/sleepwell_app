@@ -1,23 +1,26 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
+import 'package:provider/provider.dart';
+import 'package:sleepwell_app/Infrastructure/models/response/user_commend_response.dart';
+import 'package:sleepwell_app/providers/user_commend_providers/user_commend_provider.dart';
 
 class ScreenCommendsPage extends StatefulWidget {
   const ScreenCommendsPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _ScreenCommendsPageState createState() => _ScreenCommendsPageState();
 }
 
 class _ScreenCommendsPageState extends State<ScreenCommendsPage> {
-  final List<String> recomendacionesSueno = const [
-    "Evita el uso de dispositivos electrónicos una hora antes de dormir.",
-    "Mantén una rutina de sueño constante, incluso los fines de semana.",
-    "Realiza ejercicio regularmente, pero evita hacerlo antes de dormir.",
-    "Crea un ambiente oscuro y silencioso en tu habitación.",
-    "Limita el consumo de cafeína en la tarde."
-  ];
+  final logger = Logger();
 
-  // Lista de ajustes rápidos
+  late Future<List<UserCommendResponseDto>> futureRecomendaciones1;
+  late Future<List<UserCommendResponseDto>> futureRecomendaciones2;
+  late Future<List<UserCommendResponseDto>> futureRecomendaciones3;
+
+  // Lista de acciones rápidas
   final List<String> ajustesRapidos = [
     "Activar modo nocturno",
     "Reducir notificaciones",
@@ -30,6 +33,19 @@ class _ScreenCommendsPageState extends State<ScreenCommendsPage> {
     setState(() {
       currentAjusteIndex = (currentAjusteIndex + 1) % ajustesRapidos.length;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final userCommendProvider =
+        Provider.of<UserCommendProvider>(context, listen: false);
+    futureRecomendaciones1 =
+        userCommendProvider.getUserCommend(status: 1, pageSize: 6);
+    futureRecomendaciones2 =
+        userCommendProvider.getUserCommend(status: 2, pageSize: 6);
+    futureRecomendaciones3 =
+        userCommendProvider.getUserCommend(status: 3, pageSize: 6);
   }
 
   @override
@@ -49,7 +65,7 @@ class _ScreenCommendsPageState extends State<ScreenCommendsPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+          children: [
             // Iconos en la parte superior
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -64,51 +80,89 @@ class _ScreenCommendsPageState extends State<ScreenCommendsPage> {
             ),
             const SizedBox(height: 20),
 
-            // Primera sección de slider con recomendaciones
+            // Primera sección de slider
             const SectionTitle(titulo: "Recomendaciones para mejorar el sueño"),
-            SliderDeCards(recomendaciones: recomendacionesSueno),
+            _buildRecomendacionesSlider(futureRecomendaciones1),
 
             const SizedBox(height: 20),
 
             // Segunda sección de slider
             const SectionTitle(titulo: "Consejos adicionales"),
-            SliderDeCards(recomendaciones: recomendacionesSueno),
+            _buildRecomendacionesSlider(futureRecomendaciones2),
 
             const SizedBox(height: 20),
 
-            // Sección de acciones rápidas con cambio de ajuste
+            // Tercera sección de slider
+            const SectionTitle(titulo: "Hábitos saludables"),
+            _buildRecomendacionesSlider(futureRecomendaciones3),
+
+            const SizedBox(height: 20),
+
+            // Sección de acciones rápidas
             const SectionTitle(titulo: "Acciones rápidas"),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  child: Card(
-                    color: Colors.teal[100],
-                    child: InkWell(
-                      onTap: cambiarAjuste,
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.settings, size: 40, color: Colors.teal),
-                            const SizedBox(height: 10),
-                            Text(
-                              ajustesRapidos[currentAjusteIndex],
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            _buildAccionesRapidas(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildRecomendacionesSlider(
+      Future<List<UserCommendResponseDto>> futureRecomendaciones) {
+    return FutureBuilder<List<UserCommendResponseDto>>(
+      future: futureRecomendaciones,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text("Error al cargar recomendaciones: ${snapshot.error}"),
+          );
+        } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+          final recomendaciones =
+              snapshot.data!.map((commend) => commend.description).toList();
+
+          return SliderDeCards(recomendaciones: recomendaciones);
+        } else {
+          return const Center(
+            child: Text("No hay recomendaciones disponibles."),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _buildAccionesRapidas() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Expanded(
+          child: Card(
+            color: Colors.teal[100],
+            child: InkWell(
+              onTap: cambiarAjuste,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.settings, size: 40, color: Colors.teal),
+                    const SizedBox(height: 10),
+                    Text(
+                      ajustesRapidos[currentAjusteIndex],
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -146,7 +200,7 @@ class SliderDeCards extends StatelessWidget {
         itemCount: recomendaciones.length,
         itemBuilder: (context, index) {
           return Container(
-            width: 200,
+            width: 300,
             margin: const EdgeInsets.only(right: 16),
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(

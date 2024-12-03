@@ -14,7 +14,7 @@ class UserAccountProvider extends ChangeNotifier {
 
   Future getUsers() async {
     final response = await http
-        .get(Uri.parse('http://kaabstore.somee.com/WebAPI_Kaab_Haak/Account'));
+        .get(Uri.parse('https://kaabstore.somee.com/WebAPI_Kaab_Haak/Account'));
 
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
@@ -34,7 +34,7 @@ class UserAccountProvider extends ChangeNotifier {
     final user = UserAccountCreateDto(userName: userName ,email: email, password: password);
 
     final response = await http.post(
-      Uri.parse('http://sleepwellproject.somee.com/api/UserAccount'),
+      Uri.parse('https://sleepwellproject.somee.com/api/UserAccount'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

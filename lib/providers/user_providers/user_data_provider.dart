@@ -24,7 +24,7 @@ class UserDataProvider extends ChangeNotifier {
     }
 
     final response = await http.get(
-      Uri.parse('http://sleepwellproject.somee.com/api/UserData/Self'),
+      Uri.parse('https://sleepwellproject.somee.com/api/UserData/Self'),
       headers: <String, String>{
         'accept': 'application/json',
         'Authorization': 'Bearer $token',
@@ -79,7 +79,7 @@ class UserDataProvider extends ChangeNotifier {
     logger.d(user);
 
     final response = await http.put(
-      Uri.parse('http://sleepwellproject.somee.com/api/UserData'),
+      Uri.parse('https://sleepwellproject.somee.com/api/UserData'),
       headers: <String, String>{
         'accept': 'application/json',
         'Authorization': 'Bearer $token',

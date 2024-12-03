@@ -13,7 +13,7 @@ class DataDreamProvider extends ChangeNotifier {
   bool isLoading = true;
   List<DataDreamResponseDto>? get dataDream => _dataDream;
 
-  Future<void> getDataDream({int pageSize = 30}) async {
+  Future<void> getDataDream({int pageSize = 25}) async {
     // Aquí añadimos el parámetro pageSize
     try {
       final userDataToken = UserLoginProvider();
@@ -25,7 +25,7 @@ class DataDreamProvider extends ChangeNotifier {
 
       final response = await http.get(
         Uri.parse(
-            'http://sleepwellproject.somee.com/api/DataDream/Self?PageSize=$pageSize'), // Usamos el pageSize dinámico
+            'https://sleepwellproject.somee.com/api/DataDream/Self?PageSize=$pageSize'), // Usamos el pageSize dinámico
         headers: <String, String>{
           'accept': 'application/json',
           'Authorization': 'Bearer $token',

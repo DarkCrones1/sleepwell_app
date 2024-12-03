@@ -14,7 +14,7 @@ class ScreenAnalyticsPage extends StatefulWidget {
 }
 
 class _ScreenAnalyticsPageState extends State<ScreenAnalyticsPage> {
-  int _pageSize = 30; // Valor por defecto
+  int _pageSize = 25; // Valor por defecto
 
   @override
   Widget build(BuildContext context) {
@@ -59,25 +59,54 @@ class _ScreenAnalyticsPageState extends State<ScreenAnalyticsPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    const Text('Selecciona cantidad de días: '),
-                    DropdownButton<int>(
-                      value: _pageSize,
-                      items: [3, 7, 15, 30, 60].map((int value) {
-                        return DropdownMenuItem<int>(
-                          value: value,
-                          child: Text('$value días'),
-                        );
-                      }).toList(),
-                      onChanged: (newPageSize) {
-                        if (newPageSize != null) {
-                          setState(() {
-                            _pageSize = newPageSize;
-                          });
-                          dataDreamProvider.getDataDream(
-                              pageSize:
-                                  newPageSize); // Recargar los datos con el nuevo pageSize
-                        }
-                      },
+                    const Text(
+                      'Selecciona cantidad de días: ',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(width: 10),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border:
+                            Border.all(color: Colors.blue.shade400, width: 1),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.blue.withOpacity(0.2),
+                            blurRadius: 5,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: DropdownButton<int>(
+                        value: _pageSize,
+                        icon: const Icon(Icons.arrow_drop_down,
+                            color: Colors.blue),
+                        elevation: 16,
+                        style: const TextStyle(
+                          color: Colors.blue,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        underline: Container(),
+                        onChanged: (newPageSize) {
+                          if (newPageSize != null) {
+                            setState(() {
+                              _pageSize = newPageSize;
+                            });
+                            dataDreamProvider.getDataDream(
+                              pageSize: newPageSize,
+                            ); // Recargar los datos con el nuevo pageSize
+                          }
+                        },
+                        items: [3, 7, 15, 25].map((int value) {
+                          return DropdownMenuItem<int>(
+                            value: value,
+                            child: Text('$value días'),
+                          );
+                        }).toList(),
+                      ),
                     ),
                   ],
                 ),

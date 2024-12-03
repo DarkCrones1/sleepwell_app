@@ -32,14 +32,12 @@ class _SignUpPageScreenState extends State<SignUpPageScreen> {
               Column(
                 children: <Widget>[
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                        20),
+                    borderRadius: BorderRadius.circular(20),
                     child: Image.asset(
                       'image/SleepWell.png',
                       height: 250,
                       width: 250,
-                      fit: BoxFit
-                          .cover, 
+                      fit: BoxFit.cover,
                     ),
                   ),
                   const SizedBox(
@@ -125,6 +123,7 @@ class _SignUpPageScreenState extends State<SignUpPageScreen> {
                     height: 20,
                   ),
                   OverflowBar(
+                    alignment: MainAxisAlignment.start,
                     children: <Widget>[
                       TextButton.icon(
                           onPressed: () {

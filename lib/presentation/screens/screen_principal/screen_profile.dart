@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sleepwell_app/config/theme.dart';
 import 'package:sleepwell_app/providers/user_providers/user_data_provider.dart';
 
 class ScreenProfilePage extends StatelessWidget {
@@ -89,7 +90,7 @@ class ScreenProfilePage extends StatelessWidget {
                               onPressed: () {},
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
-                                    const Color.fromARGB(255, 64, 217, 255),
+                                    const Color(0xFF40D9FF),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
@@ -149,6 +150,14 @@ class ScreenProfilePage extends StatelessWidget {
                               text: 'Vincular dispositivo',
                               onTap: () {
                                 // Acción para vincular dispositivo
+                              },
+                            ),
+                            _buildOptionItem(
+                              context,
+                              icon: Icons.settings,
+                              text: 'Elegir Tema',
+                              onTap: () {
+                                Navigator.pushNamed(context, '/theme');
                               },
                             ),
                           ],

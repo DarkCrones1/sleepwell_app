@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sleepwell_app/providers/data_dream_providers/data_dream_provider.dart';
 
 class ScreenHomePage extends StatefulWidget {
   const ScreenHomePage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _ScreenHomePageState createState() => _ScreenHomePageState();
 }
 
@@ -12,6 +13,7 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
   double _sliderValue = 0.5;
   late DateTime _currentDate;
   late List<DateTime> _daysInMonth;
+  bool _isNotificationsEnabled = true;
 
   @override
   void initState() {
@@ -38,6 +40,7 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // Cabecera
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -53,7 +56,7 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
                       ),
                     ),
                     Text(
-                      'Fulanitoo',
+                      'SleepWell',
                       style: TextStyle(
                         fontSize: 25,
                         color: Colors.black54,
@@ -62,8 +65,17 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
                   ],
                 ),
                 IconButton(
-                  icon: const Icon(Icons.notifications),
-                  onPressed: () {},
+                  icon: Icon(
+                    _isNotificationsEnabled
+                        ? Icons.notifications
+                        : Icons.notifications_off,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isNotificationsEnabled =
+                          !_isNotificationsEnabled; // Alterna el estado
+                    });
+                  },
                 ),
               ],
             ),
@@ -85,7 +97,7 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
               child: Column(
                 children: [
                   const Text(
-                    '¿Te sentiste descansado después de dormir?', 
+                    '¿Te sentiste descansado después de dormir?',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
@@ -102,7 +114,7 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
                           label: "Nivel de descanso",
                           onChanged: (value) {
                             setState(() {
-                              _sliderValue = value; 
+                              _sliderValue = value;
                             });
                           },
                         ),
@@ -123,19 +135,72 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: _daysInMonth.map((date) {
+                  bool isToday = date.day == _currentDate.day &&
+                      date.month == _currentDate.month &&
+                      date.year == _currentDate.year;
                   return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Column(
                       children: [
-                        Text(
-                          '${date.day}',
-                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'][date.weekday - 1],
-                          style: const TextStyle(color: Colors.black54),
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: isToday
+                                ? Colors.blue[700]
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: isToday
+                                  ? Colors.blue[200]!
+                                  : Colors.grey.shade300,
+                              width: 2,
+                            ),
+                            boxShadow: isToday
+                                ? [
+                                    BoxShadow(
+                                      color: Colors.blue.withOpacity(0.5),
+                                      blurRadius: 8,
+                                      offset: Offset(0, 4),
+                                    ),
+                                  ]
+                                : [],
+                          ),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '${date.day}',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: isToday
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                                Text(
+                                  [
+                                    'Lun',
+                                    'Mar',
+                                    'Mié',
+                                    'Jue',
+                                    'Vie',
+                                    'Sáb',
+                                    'Dom'
+                                  ][date.weekday - 1],
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: isToday
+                                        ? Colors.white
+                                        : Colors.black54,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -150,55 +215,89 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                if (constraints.maxWidth > 600) {
-                  return GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      childAspectRatio: 2.5,
-                    ),
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      List<Map<String, String>> sleepData = [
-                        {'data': '85%', 'label': 'Calidad de sueño'},
-                        {'data': '7h', 'label': 'Tiempo de sueño'},
-                        {'data': '2 veces', 'label': 'Despertares nocturnos'},
-                      ];
-                      return SleepDataCard(
-                        data: sleepData[index]['data']!,
-                        label: sleepData[index]['label']!,
-                      );
-                    },
-                  );
-                } else {
-                  return SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: List.generate(3, (index) {
-                        List<Map<String, String>> sleepData = [
-                          {'data': '85%', 'label': 'Calidad de sueño'},
-                          {'data': '7h', 'label': 'Tiempo de sueño'},
-                          {'data': '2 veces', 'label': 'Despertares nocturnos'},
-                        ];
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 10.0),
-                          child: SizedBox(
-                            width: 150, 
-                            child: SleepDataCard(
-                              data: sleepData[index]['data']!,
-                              label: sleepData[index]['label']!,
-                            ),
-                          ),
-                        );
-                      }),
-                    ),
-                  );
+            Consumer<DataDreamProvider>(
+              builder: (context, dataDreamProvider, child) {
+                if (dataDreamProvider.isLoading) {
+                  return const Center(child: CircularProgressIndicator());
                 }
+
+                if (dataDreamProvider.dataDream == null ||
+                    dataDreamProvider.dataDream!.isEmpty) {
+                  return const Text("No hay datos de sueño disponibles.");
+                }
+
+                final sleepData = dataDreamProvider.dataDream!.first;
+
+                return LayoutBuilder(
+                  builder: (context, constraints) {
+                    if (constraints.maxWidth > 600) {
+                      return GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 2.5,
+                        ),
+                        itemCount: 3,
+                        itemBuilder: (context, index) {
+                          List<Map<String, String>> sleepDataMapped = [
+                            {
+                              'data': sleepData.sleepQualityStatusName,
+                              'label': 'Calidad de sueño'
+                            },
+                            {
+                              'data': '${sleepData.deepSleepHours}h',
+                              'label': 'Sueño profundo'
+                            },
+                            {
+                              'data': '${sleepData.interruptions} veces',
+                              'label': 'Despertares nocturnos'
+                            },
+                          ];
+                          return SleepDataCard(
+                            data: sleepDataMapped[index]['data']!,
+                            label: sleepDataMapped[index]['label']!,
+                          );
+                        },
+                      );
+                    } else {
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: List.generate(3, (index) {
+                            List<Map<String, String>> sleepDataMapped = [
+                              {
+                                'data': sleepData.sleepQualityStatusName,
+                                'label': 'Calidad de sueño'
+                              },
+                              {
+                                'data': '${sleepData.deepSleepHours}h',
+                                'label': 'Sueño profundo'
+                              },
+                              {
+                                'data': '${sleepData.interruptions} veces',
+                                'label': 'Despertares nocturnos'
+                              },
+                            ];
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 10.0),
+                              child: SizedBox(
+                                width: 150,
+                                child: SleepDataCard(
+                                  data: sleepDataMapped[index]['data']!,
+                                  label: sleepDataMapped[index]['label']!,
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                      );
+                    }
+                  },
+                );
               },
             ),
             const SizedBox(height: 40),
@@ -209,7 +308,8 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
                 icon: const Icon(Icons.nightlight_round),
                 label: const Text('Empezar a dormir'),
                 style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   backgroundColor: Colors.blue[700],
                   foregroundColor: Colors.white,
                   textStyle: const TextStyle(fontSize: 20),
@@ -234,26 +334,28 @@ class SleepDataCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.blue[200],
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(data, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-          if (label.isNotEmpty)
-            Text(label, style: const TextStyle(fontSize: 16, color: Colors.black54)),
-        ],
+    return Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              data,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              label,
+              style: const TextStyle(fontSize: 14, color: Colors.black54),
+            ),
+          ],
+        ),
       ),
     );
   }

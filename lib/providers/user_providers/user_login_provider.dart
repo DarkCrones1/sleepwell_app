@@ -19,7 +19,7 @@ class UserLoginProvider extends ChangeNotifier {
 
     try {
       final response = await http.post(
-        Uri.parse('http://sleepwellproject.somee.com/api/Login'),
+        Uri.parse('https://sleepwellproject.somee.com/api/Login'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

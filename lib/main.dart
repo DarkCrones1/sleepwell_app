@@ -9,6 +9,7 @@ import 'package:sleepwell_app/presentation/screens/screen_user/screen_user_login
 import 'package:sleepwell_app/presentation/screens/screen_user/screen_user_recover.dart';
 import 'package:sleepwell_app/presentation/screens/screen_user/screen_user_signup.dart';
 import 'package:sleepwell_app/providers/data_dream_providers/data_dream_provider.dart';
+import 'package:sleepwell_app/providers/user_commend_providers/user_commend_provider.dart';
 import 'package:sleepwell_app/providers/user_providers/user_account_provider.dart';
 import 'package:sleepwell_app/providers/user_providers/user_data_provider.dart';
 import 'package:sleepwell_app/providers/user_providers/user_login_provider.dart';
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserAccountProvider()),
         ChangeNotifierProvider(create: (_) => UserLoginProvider()),
         ChangeNotifierProvider(create: (_) => UserDataProvider()..getUserData()),
-        ChangeNotifierProvider(create: (_) => DataDreamProvider()..getDataDream())
+        ChangeNotifierProvider(create: (_) => DataDreamProvider()..getDataDream()),
+        ChangeNotifierProvider(create: (_) => UserCommendProvider())
       ],
       child: const MaterialAppWidget(),
     );
