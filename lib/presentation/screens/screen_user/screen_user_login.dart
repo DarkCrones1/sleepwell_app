@@ -41,17 +41,27 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                     end: Alignment.bottomCenter,
                   ),
                 ),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(top: 40.0), // Ajuste del logo
-                    child: Image.asset(
-                      'image/SleepWell.png', // Ruta del logo
-                      height: 100,
-                      width: 100,
-                    ),
-                  ),
+                child: ListView(
+                  children: <Widget>[
+                    Column(
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                              20), // Ajusta el valor para redondear más o menos las esquinas
+                          child: Image.asset(
+                            'image/SleepWell.png',
+                            height: 150,
+                            width: 150,
+                            fit: BoxFit
+                                .cover, // Esto asegura que la imagen cubra completamente el espacio
+                          ),
+                        )
+                      ],
+                    )
+                  ],
                 ),
               ),
               // Centrar la tarjeta blanca
@@ -70,7 +80,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
+                        children: <Widget>[
                           const Text(
                             'Inicio de Sesión',
                             textAlign: TextAlign.center,
@@ -130,20 +140,28 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                           ),
                           const SizedBox(height: 15),
                           // Olvidó su contraseña
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/recover_pass');
-                              },
-                              child: const Text(
-                                'Olvidaste tu contraseña?',
-                                style: TextStyle(color: Color(0xFF04abce)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                          context, '/recover_pass');
+                                    },
+                                    child: const Text(
+                                      'Olvidaste tu contraseña?',
+                                      style:
+                                          TextStyle(color: Color(0xFF04abce)),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
+                            ],
                           ),
-                          const SizedBox(height: 15),
-                          // Botón de inicio de sesión con efecto hover
                           MouseRegion(
                             onEnter: (_) {
                               setState(() {
@@ -182,23 +200,19 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(height: 15),
-                          // Registro
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text("¿No tienes cuenta? "),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, '/sign_up');
-                                },
-                                child: const Text(
-                                  'Registrar',
-                                  style: TextStyle(color: Color(0xFF04abce)),
-                                ),
+                          OverflowBar(children: <Widget>[
+                            const Text("¿No tienes cuenta? "),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/sign_up');
+                              },
+                              child: const Text(
+                                'Registrar',
+                                style: TextStyle(color: Color(0xFF04abce)),
                               ),
-                            ],
-                          ),
+                            ),
+                          ]),
+                          // Registro
                         ],
                       ),
                     ),

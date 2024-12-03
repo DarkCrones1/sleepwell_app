@@ -88,7 +88,9 @@ class ScreenProfilePage extends StatelessWidget {
                             ),
                             const SizedBox(height: 20),
                             ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/screen_packages');
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
                                     const Color(0xFF40D9FF),
@@ -150,7 +152,7 @@ class ScreenProfilePage extends StatelessWidget {
                               icon: Icons.devices,
                               text: 'Vincular dispositivo',
                               onTap: () {
-                                // Acción para vincular dispositivo
+                                Navigator.pushNamed(context, '/screen_wearable');
                               },
                             ),
                             _buildOptionItem(
