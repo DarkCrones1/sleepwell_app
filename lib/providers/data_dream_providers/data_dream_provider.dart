@@ -13,7 +13,7 @@ class DataDreamProvider extends ChangeNotifier {
   bool isLoading = true;
   List<DataDreamResponseDto>? get dataDream => _dataDream;
 
-  Future<void> getDataDream({int pageSize = 25}) async {
+  Future<void> getDataDream({int pageSize = 7}) async {
     // Aquí añadimos el parámetro pageSize
     try {
       final userDataToken = UserLoginProvider();

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sleepwell_app/providers/user_providers/user_data_provider.dart';
+import 'package:sleepwell_app/providers/user_providers/user_login_provider.dart';
 
 class ScreenProfilePage extends StatelessWidget {
   const ScreenProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final userDataToken = UserLoginProvider();
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -168,6 +170,8 @@ class ScreenProfilePage extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       // Acción para cerrar sesión
+                      userDataToken.clearAuthToken();
+                      Navigator.popAndPushNamed(context, '/log_in');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.redAccent,
@@ -181,6 +185,7 @@ class ScreenProfilePage extends StatelessWidget {
                       'Cerrar sesión',
                       style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
+                    
                   ),
                 ],
               ),

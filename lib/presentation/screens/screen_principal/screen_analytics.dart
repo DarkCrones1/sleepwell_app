@@ -14,7 +14,7 @@ class ScreenAnalyticsPage extends StatefulWidget {
 }
 
 class _ScreenAnalyticsPageState extends State<ScreenAnalyticsPage> {
-  int _pageSize = 25; // Valor por defecto
+  int _pageSize = 7; // Valor por defecto
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,7 @@ class _ScreenAnalyticsPageState extends State<ScreenAnalyticsPage> {
                           BoxShadow(
                             color: Colors.blue.withOpacity(0.2),
                             blurRadius: 5,
-                            offset: Offset(0, 4),
+                            offset: const Offset(0, 4),
                           ),
                         ],
                       ),
@@ -170,11 +170,11 @@ class _ScreenAnalyticsPageState extends State<ScreenAnalyticsPage> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Container(
-                  height: 150,
+                  height: 250,
                   padding: const EdgeInsets.all(8.0),
                   child: BarChart(
                     BarChartData(
-                      gridData: const FlGridData(show: false),
+                      gridData: const FlGridData(show: true),
                       titlesData: FlTitlesData(
                         leftTitles: const AxisTitles(
                           sideTitles:

@@ -162,7 +162,7 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
                                     BoxShadow(
                                       color: Colors.blue.withOpacity(0.5),
                                       blurRadius: 8,
-                                      offset: Offset(0, 4),
+                                      offset: const Offset(0, 4),
                                     ),
                                   ]
                                 : [],
@@ -226,7 +226,7 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
                   return const Text("No hay datos de sueño disponibles.");
                 }
 
-                final sleepData = dataDreamProvider.dataDream!.first;
+                final sleepData = dataDreamProvider.dataDream!.last;
 
                 return LayoutBuilder(
                   builder: (context, constraints) {
@@ -285,7 +285,7 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
                             return Padding(
                               padding: const EdgeInsets.only(right: 10.0),
                               child: SizedBox(
-                                width: 150,
+                                width: 200,
                                 child: SleepDataCard(
                                   data: sleepDataMapped[index]['data']!,
                                   label: sleepDataMapped[index]['label']!,
@@ -335,6 +335,7 @@ class SleepDataCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.blue.withOpacity(0.2),
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Padding(
