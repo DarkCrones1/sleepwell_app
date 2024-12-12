@@ -19,55 +19,59 @@ class _ScreenPackagesState extends State<ScreenPackages> {
         title: Text("Paquetes para el Sueño"),
         backgroundColor: isStandard ? Colors.lightBlueAccent : Colors.amber,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Card para el paquete estándar
-            PackageCard(
-              title: "Paquete Estándar",
-              subtitle: "Ideal para comenzar",
-              description:
-                  "Accede a herramientas básicas para monitorear tu sueño y obtener estadísticas esenciales.",
-              features: const [
-                "Monitorización básica del sueño",
-                "Estadísticas diarias",
-                "Gratis para siempre"
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Card para el paquete estándar
+                PackageCard(
+                  title: "Paquete Estándar",
+                  subtitle: "Ideal para comenzar",
+                  description:
+                      "Accede a herramientas básicas para monitorear tu sueño y obtener estadísticas esenciales.",
+                  features: const [
+                    "Monitorización básica del sueño",
+                    "Estadísticas diarias",
+                    "Gratis para siempre"
+                  ],
+                  color: Colors.lightBlueAccent,
+                  icon: Icons.bedtime,
+                  buttonText: "Usar ahora",
+                  onPressed: () {
+                    setState(() {
+                      isStandard = true;
+                    });
+                  },
+                ),
+                SizedBox(height: 16),
+                // Card para el paquete premium
+                PackageCard(
+                  title: "Paquete Premium",
+                  subtitle: "Máximo confort y análisis avanzado",
+                  description:
+                      "Incluye análisis avanzados con IA, bitácoras personalizadas, recomendaciones para mejorar tu sueño y más.",
+                  features: const [
+                    "Análisis avanzado con IA",
+                    "Bitácora personalizada",
+                    "Recomendaciones avanzadas",
+                    "Monitoreo en tiempo real"
+                  ],
+                  color: Colors.amber,
+                  icon: Icons.star,
+                  buttonText: "Suscribirse",
+                  onPressed: () {
+                    setState(() {
+                      isStandard = false;
+                    });
+                  },
+                ),
               ],
-              color: Colors.lightBlueAccent,
-              icon: Icons.bedtime,
-              buttonText: "Usar ahora",
-              onPressed: () {
-                setState(() {
-                  isStandard = true;
-                });
-              },
             ),
-            SizedBox(height: 16),
-            // Card para el paquete premium
-            PackageCard(
-              title: "Paquete Premium",
-              subtitle: "Máximo confort y análisis avanzado",
-              description:
-                  "Incluye análisis avanzados con IA, bitácoras personalizadas, recomendaciones para mejorar tu sueño y más.",
-              features: const [
-                "Análisis avanzado con IA",
-                "Bitácora personalizada",
-                "Recomendaciones avanzadas",
-                "Monitoreo en tiempo real"
-              ],
-              color: Colors.amber,
-              icon: Icons.star,
-              buttonText: "Suscribirse",
-              onPressed: () {
-                setState(() {
-                  isStandard = false;
-                });
-              },
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
