@@ -16,7 +16,7 @@ class DataDreamResponseDto {
     final String sleepQualityStatusName;
     final int averageHearthRate;
     final int averageOxygenLevel;
-    final int deepSleepHours;
+    final double deepSleepHours;
     final int interruptions;
 
     DataDreamResponseDto({
