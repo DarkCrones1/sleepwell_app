@@ -15,6 +15,8 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
   late DateTime _currentDate;
   late List<DateTime> _daysInMonth;
   bool _isNotificationsEnabled = true;
+  TextEditingController _medicationController = TextEditingController();
+  List<Map<String, dynamic>> _medications = [];
 
   @override
   void initState() {
@@ -31,6 +33,18 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
       days.add(firstDayOfMonth.add(Duration(days: i)));
     }
     return days;
+  }
+
+  void _saveMedication() {
+    if (_medicationController.text.isNotEmpty) {
+      setState(() {
+        _medications.add({
+          'date': _currentDate,
+          'medication': _medicationController.text,
+        });
+      });
+      _medicationController.clear();
+    }
   }
 
   @override
@@ -209,98 +223,45 @@ class _ScreenHomePageState extends State<ScreenHomePage> {
               ),
             ),
             const SizedBox(height: 30),
-            // Datos de sueño
+            // Pregunta sobre medicamentos
             const Text(
-              'Datos de sueño',
+              '¿Estás tomando algún medicamento?',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            Consumer<DataDreamProvider>(
-              builder: (context, dataDreamProvider, child) {
-                if (dataDreamProvider.isLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                if (dataDreamProvider.dataDream == null ||
-                    dataDreamProvider.dataDream!.isEmpty) {
-                  return const Text("No hay datos de sueño disponibles.");
-                }
-
-                final sleepData = dataDreamProvider.dataDream!.last;
-
-                return LayoutBuilder(
-                  builder: (context, constraints) {
-                    if (constraints.maxWidth > 600) {
-                      return GridView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          childAspectRatio: 2.5,
-                        ),
-                        itemCount: 3,
-                        itemBuilder: (context, index) {
-                          List<Map<String, String>> sleepDataMapped = [
-                            {
-                              'data': sleepData.sleepQualityStatusName,
-                              'label': 'Calidad de sueño'
-                            },
-                            {
-                              'data': '${sleepData.deepSleepHours}h',
-                              'label': 'Sueño profundo'
-                            },
-                            {
-                              'data': '${sleepData.interruptions} veces',
-                              'label': 'Despertares nocturnos'
-                            },
-                          ];
-                          return SleepDataCard(
-                            data: sleepDataMapped[index]['data']!,
-                            label: sleepDataMapped[index]['label']!,
-                          );
-                        },
-                      );
-                    } else {
-                      return SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: List.generate(3, (index) {
-                            List<Map<String, String>> sleepDataMapped = [
-                              {
-                                'data': sleepData.sleepQualityStatusName,
-                                'label': 'Calidad de sueño'
-                              },
-                              {
-                                'data': '${sleepData.deepSleepHours}h',
-                                'label': 'Sueño profundo'
-                              },
-                              {
-                                'data': '${sleepData.interruptions} veces',
-                                'label': 'Despertares nocturnos'
-                              },
-                            ];
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 10.0),
-                              child: SizedBox(
-                                width: 200,
-                                child: SleepDataCard(
-                                  data: sleepDataMapped[index]['data']!,
-                                  label: sleepDataMapped[index]['label']!,
-                                ),
-                              ),
-                            );
-                          }),
-                        ),
-                      );
-                    }
-                  },
-                );
-              },
+            TextField(
+              controller: _medicationController,
+              decoration: const InputDecoration(
+                labelText: 'Nombre del medicamento',
+                border: OutlineInputBorder(),
+              ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: _saveMedication,
+              child: const Text('Guardar Medicamento'),
+            ),
+            const SizedBox(height: 30),
+            // Mostrar lista de medicamentos
+            // const Text(
+            //   'Medicamentos registrados:',
+            //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            // ),
+            // const SizedBox(height: 10),
+            // _medications.isEmpty
+            //     ? const Text('No se ha registrado ningún medicamento.')
+            //     : ListView.builder(
+            //         shrinkWrap: true,
+            //         itemCount: _medications.length,
+            //         itemBuilder: (context, index) {
+            //           return ListTile(
+            //             title: Text(_medications[index]['medication']),
+            //             subtitle: Text(
+            //                 'Fecha: ${_medications[index]['date'].toLocal()}'),
+            //           );
+            //         },
+            //       ),
+            // const SizedBox(height: 40),
             // Botón de "Empezar a dormir"
             Center(
               child: ElevatedButton.icon(

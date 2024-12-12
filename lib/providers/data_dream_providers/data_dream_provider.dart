@@ -46,8 +46,6 @@ class DataDreamProvider extends ChangeNotifier {
           _dataDream = dataDreamList
               .map((dream) => DataDreamResponseDto.fromJson(dream))
               .toList();
-
-          logger.d("Datos obtenidos: $_dataDream");
         } else {
           throw Exception(
               'El campo "Data" es inválido o no existe en la respuesta');

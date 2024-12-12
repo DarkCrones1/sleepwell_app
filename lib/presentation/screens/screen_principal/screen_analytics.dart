@@ -38,9 +38,13 @@ class _ScreenAnalyticsPageState extends State<ScreenAnalyticsPage> {
           final data =
               dataDreamProvider.dataDream!; // Usamos un valor no nulo aquí
 
+          if (data.isEmpty) {
+            return const Center(child: Text('No hay datos disponibles.'));
+          }
+
           // Mapeo de horas de sueño profundo para el gráfico
           final sleepDurations =
-              data.map((item) => item.deepSleepHours.toDouble()).toList();
+              data.map((item) => item.deepSleepHours).toList();
           // Mapeo de calidad del sueño para el gráfico
           final qualityScores = data
               .map((item) =>
@@ -172,8 +176,8 @@ class _ScreenAnalyticsPageState extends State<ScreenAnalyticsPage> {
                 Container(
                   height: 250,
                   padding: const EdgeInsets.all(8.0),
-                  child: BarChart(
-                    BarChartData(
+                  child: LineChart(
+                    LineChartData(
                       gridData: const FlGridData(show: true),
                       titlesData: FlTitlesData(
                         leftTitles: const AxisTitles(
@@ -198,20 +202,25 @@ class _ScreenAnalyticsPageState extends State<ScreenAnalyticsPage> {
                           ),
                         ),
                       ),
-                      barGroups: qualityScores
-                          .asMap()
-                          .map((i, score) => MapEntry(
-                              i,
-                              BarChartGroupData(x: i, barRods: [
-                                BarChartRodData(
-                                    toY: score.toDouble(),
-                                    color: Colors.blueAccent),
-                              ])))
-                          .values
-                          .toList(),
+                      lineBarsData: [
+                        LineChartBarData(
+                          isCurved: true,
+                          spots: qualityScores
+                              .asMap()
+                              .map((i, score) => MapEntry(
+                                  i, FlSpot(i.toDouble(), score.toDouble())))
+                              .values
+                              .toList(),
+                          belowBarData: BarAreaData(
+                            show: true,
+                            color: Colors.blueAccent.withOpacity(0.2),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 16),
 
                 // Gráfico circular para mostrar la distribución de calidad del sueño
@@ -397,7 +406,7 @@ int _calculateGoodQualityPercentage(List<DataDreamResponseDto> data) {
 String _calculateSleepPhaseDistribution(List<DataDreamResponseDto> data) {
   if (data.isEmpty) return "Sin datos";
 
-  int deepSleepCount = 0;
+  double deepSleepCount = 0;
   int totalSleepCount = 0;
 
   for (var item in data) {

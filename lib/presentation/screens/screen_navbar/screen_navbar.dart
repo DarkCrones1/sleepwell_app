@@ -3,7 +3,7 @@ import 'package:sleepwell_app/presentation/screens/screen_principal/screen_analy
 import 'package:sleepwell_app/presentation/screens/screen_principal/screen_commends.dart';
 import 'package:sleepwell_app/presentation/screens/screen_principal/screen_home.dart';
 import 'package:sleepwell_app/presentation/screens/screen_principal/screen_profile.dart';
-import 'package:sleepwell_app/presentation/screens/screen_principal/screen_time.dart';
+// import 'package:sleepwell_app/presentation/screens/screen_principal/screen_time.dart';
 
 class ScreenNavbar extends StatefulWidget {
   const ScreenNavbar({super.key});
@@ -14,7 +14,7 @@ class ScreenNavbar extends StatefulWidget {
 
 class _ScreenNavbarState extends State<ScreenNavbar> {
 
-  int currentPageIndex = 2;
+  int currentPageIndex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class _ScreenNavbarState extends State<ScreenNavbar> {
         },
         selectedIndex: currentPageIndex,
         destinations: const <Widget>[
-          NavigationDestination(icon: Icon(Icons.access_time), label: 'Horario' ),
+          // NavigationDestination(icon: Icon(Icons.access_time), label: 'Horario' ),
           NavigationDestination(icon: Icon(Icons.category), label: 'Personal' ),
           NavigationDestination(icon: Icon(Icons.home_filled), label: 'Inicio' ),
           NavigationDestination(icon: Icon(Icons.analytics), label: 'Análisis' ),
@@ -35,10 +35,10 @@ class _ScreenNavbarState extends State<ScreenNavbar> {
         ],
       ),
       body: <Widget>[
-        Container(
-          alignment: Alignment.center,
-          child: const ScreenTimePage(),
-        ),
+        // Container(
+        //   alignment: Alignment.center,
+        //   child: const ScreenTimePage(),
+        // ),
         Container(
           alignment: Alignment.center,
           child: const ScreenCommendsPage() ,
