@@ -2,8 +2,35 @@
 
 import 'package:flutter/material.dart';
 
-class ScreenWearable extends StatelessWidget {
+class ScreenWearable extends StatefulWidget {
   const ScreenWearable({super.key});
+
+  @override
+  State<ScreenWearable> createState() => _ScreenWearableState();
+}
+
+class _ScreenWearableState extends State<ScreenWearable> {
+  // Variables para el estado del dispositivo
+  String deviceModel = 'Desconocido';
+  String connectionStatus = 'Desconectado';
+  bool isLoading = false;
+
+  // Simulación de obtención de datos del dispositivo
+  Future<void> fetchDeviceInfo() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    // Simula un retraso para la obtención de datos
+    await Future.delayed(Duration(seconds: 2));
+
+    // Simula datos del dispositivo conectado (puedes reemplazar esto con una API real)
+    setState(() {
+      deviceModel = 'AMAZFIT BAND 7';
+      connectionStatus = 'Conectado';
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,33 +56,33 @@ class ScreenWearable extends StatelessWidget {
                   size: 40,
                   color: Colors.blue,
                 ),
-                title: const Text(
+                title: Text(
                   'Dispositivo conectado',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                subtitle: const Text(
-                    'Modelo: HUAWEI WATCH FIT YDA-B09S\nEstado: Conectado'),
+                subtitle: Text(
+                  'Modelo: $deviceModel\nEstado: $connectionStatus',
+                  style: const TextStyle(fontSize: 16),
+                ),
               ),
             ),
             const Spacer(),
-            // Botón para vincular dispositivo
-            ElevatedButton.icon(
-              onPressed: () {
-                // Acción para vincular el dispositivo
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content:
-                          Text('Iniciando vinculación con el dispositivo...')),
-                );
-              },
-              icon: const Icon(Icons.devices),
-              label: const Text('Vincular dispositivo'),
-              style: ElevatedButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                textStyle: const TextStyle(fontSize: 16),
+            // Indicador de carga
+            if (isLoading)
+              CircularProgressIndicator()
+            else
+              // Botón para obtener información del dispositivo
+              ElevatedButton.icon(
+                onPressed: fetchDeviceInfo,
+                icon: const Icon(Icons.devices),
+                label: const Text('Vincular dispositivo'),
+                style: ElevatedButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                  textStyle: const TextStyle(fontSize: 16),
+                ),
               ),
-            ),
           ],
         ),
       ),

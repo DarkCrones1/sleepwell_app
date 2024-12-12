@@ -147,14 +147,14 @@ class ScreenProfilePage extends StatelessWidget {
                                 Navigator.pushNamed(context, '/screen_permissions');
                               },
                             ),
-                            _buildOptionItem(
-                              context,
-                              icon: Icons.devices,
-                              text: 'Vincular dispositivo',
-                              onTap: () {
-                                Navigator.pushNamed(context, '/screen_wearable');
-                              },
-                            ),
+                            // _buildOptionItem(
+                            //   context,
+                            //   icon: Icons.devices,
+                            //   text: 'Vincular dispositivo',
+                            //   onTap: () {
+                            //     Navigator.pushNamed(context, '/screen_wearable');
+                            //   },
+                            // ),
                             _buildOptionItem(
                               context,
                               icon: Icons.settings,
